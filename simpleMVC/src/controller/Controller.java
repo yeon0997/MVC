@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.UserDBBean;
 import model.UserDataBean;
 
 /**
@@ -59,8 +60,10 @@ public class Controller extends HttpServlet implements ControlInterface{
 		String email = request.getParameter("email");
 		
 		UserDataBean user = new UserDataBean(firstname, lastname, email);
-		request.setAttribute("user", user);
-		
+		UserDBBean user1 = new UserDBBean();
+		UserDBBean.insertUser(user.getFirstname(), user.getLastname(), user.getEmail());
+		request.setAttribute("user", user1);
+
 		RequestDispatcher dp = request.getRequestDispatcher("result.jsp");
 		dp.forward(request, response);
 	}
