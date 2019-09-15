@@ -60,11 +60,14 @@ public class Controller extends HttpServlet implements ControlInterface{
 		String email = request.getParameter("email");
 		
 		UserDataBean user = new UserDataBean(firstname, lastname, email);
-		request.setAttribute("user", user);
 		UserDBBean user1 = new UserDBBean();
+		UserDBBean.insertUser(user.getFirstname(), user.getLastname(), user.getEmail());
+		
+		request.setAttribute("user", user);
 		
 		RequestDispatcher dp = request.getRequestDispatcher("result.jsp");
 		dp.forward(request, response);
 	}
+
 
 }

@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import model.UserDataBean;
 
 //2.DB접속해제 부분을 제외하고는 USER SEARCH로 분리
@@ -57,34 +60,42 @@ public class UserDBBean {
 			e.printStackTrace();
 		}
 	}
-	public static void searchUser() {
+	
+	public List<UserDataBean> searchUser(String String) {
 		//2.PSTMT문 준비 -> 쿼리전송
+		DBConnect();
 		String sql = "select * from members";
+		List<UserDataBean> userList = new ArrayList<UserDataBean>();
+
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				System.out.println("first name : " + rs.getString("firstname"));
-				System.out.println("last name : " + rs.getString("lastname"));
-				System.out.println("email : " + rs.getString("email"));
+				UserDataBean user = new UserDataBean(String, String, String);
+				user.setFirstname(rs.getString("firstname"));
+				user.setLastname(rs.getString("lastname"));
+				user.setEmail(rs.getString("email"));
+				userList.add(user);
 				//rs.getString("email")는 rs.getString(3)으로 쓸 수 있음. 3은 컬럼의 순서
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return userList;
 	}
-	public static void insertUser(UserDataBean user) {
+	
+	public static void insertUser(String firstname, String lastname, String email) {
 		//2.PSTMT문 준비 -> 쿼리전송
 		DBConnect();
-		String sql = "inset into members values(?, ?, ?)";
+		String sql = "insert into members(firstname, lastname, email) values(?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, user.getFirstname());;
-			pstmt.setString(2, user.getLastname());
-			pstmt.setString(3, user.getEmail());
+			pstmt.setString(1, firstname);;
+			pstmt.setString(2, lastname);
+			pstmt.setString(3, email);
 			
 			int num = pstmt.executeUpdate();
 			
@@ -96,16 +107,7 @@ public class UserDBBean {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	
-	public static void main(String[] args) throws SQLException{
-	
-		DBConnect();
-		searchUser();
-		insertUser(UserDataBean);
 		DBClose();
-		
 	}
 
 }

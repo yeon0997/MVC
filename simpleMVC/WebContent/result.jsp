@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="java.util.List"%>
 <%@ page import = "model.UserDataBean" %>    
 <!DOCTYPE html>
 <html>
@@ -10,12 +11,24 @@
 <body>
 	<h1>회원가입 결과 출력</h1>
 	<%
-		UserDataBean user2 = (UserDataBean)request.getAttribute("user");
+	List<UserDataBean> userList = (List<UserDataBean>) request.getAttribute("userList");
+
 	%>
 	
-	FirstName : <%= user2.getFirstname() %> <br>
-	LastName : <%= user2.getLastname()%><br>
-	Email : <%= user2.getEmail()%><br>
+	<% for(UserDataBean m : userList){
+      
+   %>
+
+	FIRSTNEME : <%=m.getFirstname() %>
+	LASTNAME : <%=m.getLastname() %>
+	EMAIL : <%=m.getEmail() %>
+
+ <%
+ 
+   }
+  %>
+
+
 	
 </body>
 </html>
