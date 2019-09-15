@@ -5,11 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import model.UserDataBean;
 
 //2.DB접속해제 부분을 제외하고는 USER SEARCH로 분리
 //3.INSERT 메소드를 추가
 //-INDEX.JSP에서 받아와서 CONTROLLER가 가지고 있는 회원정보를 DB에 넘겨주는 부분으로 추가
-//-DB에 넘겨주는 부분으로 추가 insert into member(?,?,?) 
+//-DB에 넘겨주는 부분으로 추가 insert into members(?,?,?) 
 //	-> user.getfirstname(), user.getlastname(), user.getemail()  	
 //4.SEARCH한 결과를 RESULT.JSP에 출력
 
@@ -19,6 +20,7 @@ public class UserDBBean {
 	static final String url = "jdbc:mysql://localhost:3306/simplemvc?serverTimezone=UTC";
 	static final String userid = "root";
 	static final String userpw = "1234";
+	private static final UserDataBean UserDataBean = null;
 	
 	static Connection conn = null;
 	static PreparedStatement pstmt = null;
@@ -57,7 +59,7 @@ public class UserDBBean {
 	}
 	public static void searchUser() {
 		//2.PSTMT문 준비 -> 쿼리전송
-		String sql = "select * from member";
+		String sql = "select * from members";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -73,15 +75,19 @@ public class UserDBBean {
 			e.printStackTrace();
 		}
 	}
-	public static void insertUser(String ufirstname, String ulastname, String uemail) {
+	public static void insertUser(UserDataBean user) {
 		//2.PSTMT문 준비 -> 쿼리전송
-		String sql = "inset into member(?, ?, ?)";
+		DBConnect();
+		String sql = "inset into members values(?, ?, ?)";
 		try {
-			pstmt.setString(1, ufirstname);
-			pstmt.setString(2, ulastname);
-			pstmt.setString(3, uemail);
 			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, user.getFirstname());;
+			pstmt.setString(2, user.getLastname());
+			pstmt.setString(3, user.getEmail());
+			
 			int num = pstmt.executeUpdate();
+			
 			if(num == 0)
 				System.out.println("데이터 추가 실패");
 			else
@@ -97,6 +103,7 @@ public class UserDBBean {
 	
 		DBConnect();
 		searchUser();
+		insertUser(UserDataBean);
 		DBClose();
 		
 	}
