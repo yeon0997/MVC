@@ -19,11 +19,11 @@ import model.UserDataBean;
 
 
 public class UserDBBean {
-	static final String driver = "com.mysql.cj.jdbc.Driver"; //정적변수로 드라이버를 생성
+	static final String driver = "com.mysql.jdbc.Driver"; //정적변수로 드라이버를 생성
 	static final String url = "jdbc:mysql://localhost:3306/simplemvc?serverTimezone=UTC";
 	static final String userid = "root";
 	static final String userpw = "1234";
-	private static final UserDataBean UserDataBean = null;
+
 	
 	static Connection conn = null;
 	static PreparedStatement pstmt = null;
@@ -61,10 +61,10 @@ public class UserDBBean {
 		}
 	}
 	
-	public List<UserDataBean> searchUser(String String) {
+	public static List<UserDataBean> searchUser() {
 		//2.PSTMT문 준비 -> 쿼리전송
 		DBConnect();
-		String sql = "select * from members";
+		String sql = "select * from member";
 		List<UserDataBean> userList = new ArrayList<UserDataBean>();
 
 		try {
@@ -72,24 +72,22 @@ public class UserDBBean {
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				UserDataBean user = new UserDataBean(String, String, String);
+				UserDataBean user = new UserDataBean(null, null, null);
 				user.setFirstname(rs.getString("firstname"));
 				user.setLastname(rs.getString("lastname"));
 				user.setEmail(rs.getString("email"));
 				userList.add(user);
-				//rs.getString("email")는 rs.getString(3)으로 쓸 수 있음. 3은 컬럼의 순서
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return userList;
 	}
 	
-	public static void insertUser(String firstname, String lastname, String email) {
+	public void insertUser(String firstname, String lastname, String email) {
 		//2.PSTMT문 준비 -> 쿼리전송
 		DBConnect();
-		String sql = "insert into members(firstname, lastname, email) values(?, ?, ?)";
+		String sql = "insert into member(firstname, lastname, email) values(?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			

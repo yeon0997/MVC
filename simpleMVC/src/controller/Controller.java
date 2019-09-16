@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -61,9 +63,12 @@ public class Controller extends HttpServlet implements ControlInterface{
 		
 		UserDataBean user = new UserDataBean(firstname, lastname, email);
 		UserDBBean user1 = new UserDBBean();
-		UserDBBean.insertUser(user.getFirstname(), user.getLastname(), user.getEmail());
-		
-		request.setAttribute("user", user);
+		user1.insertUser(user.getFirstname(), user.getLastname(), user.getEmail());
+	    
+	    List<UserDataBean> userList = UserDBBean.searchUser();
+	    
+	    UserDBBean.DBClose();
+		request.setAttribute("userList", user);
 		
 		RequestDispatcher dp = request.getRequestDispatcher("result.jsp");
 		dp.forward(request, response);
