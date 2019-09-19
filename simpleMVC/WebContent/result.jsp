@@ -24,7 +24,6 @@
 	EMAIL : <%=m.getEmail() %>
 
  <%
- 
    }
   %>
 

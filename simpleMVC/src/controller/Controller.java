@@ -65,9 +65,7 @@ public class Controller extends HttpServlet implements ControlInterface{
 		UserDBBean user1 = new UserDBBean();
 		user1.insertUser(user.getFirstname(), user.getLastname(), user.getEmail());
 	    
-	    List<UserDataBean> userList = UserDBBean.searchUser();
-	    
-	    UserDBBean.DBClose();
+
 		request.setAttribute("userList", user);
 		
 		RequestDispatcher dp = request.getRequestDispatcher("result.jsp");

@@ -68,14 +68,17 @@ public class UserDBBean {
 		List<UserDataBean> userList = new ArrayList<UserDataBean>();
 
 		try {
+			
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				UserDataBean user = new UserDataBean(null, null, null);
-				user.setFirstname(rs.getString("firstname"));
-				user.setLastname(rs.getString("lastname"));
-				user.setEmail(rs.getString("email"));
+				UserDataBean user = new UserDataBean(rs.getString("firstname"), rs.getString("lastname"), rs.getString("email"));
+				
+				user.setFirstname("firstname");
+				user.setLastname("lastname");
+				user.setEmail("email");
+				
 				userList.add(user);
 			}
 		} catch (SQLException e) {
@@ -105,9 +108,7 @@ public class UserDBBean {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		DBClose();
 	}
-
 }
 
 
